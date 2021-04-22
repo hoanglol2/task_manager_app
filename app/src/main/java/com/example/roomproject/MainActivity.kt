@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.navigation.findNavController
 import com.example.roomproject.ui.HomeFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -129,12 +130,17 @@ class MainActivity : AppCompatActivity() {
             val fragmentHomeFragment = findFragmentByTag("HomeFragment")
             val fragmentSignUpFragment = findFragmentByTag("SignInFragment")
             fragmentHomeFragment?.let {
-                beginTransaction().remove(it)
-            }?.commitNow()
-            fragmentSignUpFragment?.let {
-                beginTransaction().remove(it)
+                commit {
+                    popBackStack()
+                    remove(it)
+                }
             }
-                ?.commitNow()
+            fragmentSignUpFragment?.let {
+                commit {
+                    popBackStack()
+                    remove(it)
+                }
+            }
         }
     }
 }
