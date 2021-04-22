@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/miHome"
+        android:icon="@drawable/ic_home"
+        android:title="Home" />
+    <item
+        android:id="@+id/miCalendar"
+        android:icon="@drawable/ic_calendar"
+        android:title="Calendar" />
+    <item
+        android:id="@+id/miCreateTask"
+        android:icon="@drawable/ic_plus"
+        android:title="Create task" />
+    <item
+        android:id="@+id/miUser"
+        android:icon="@drawable/ic_user"
+        android:title="User" />
+    <item
+        android:id="@+id/miSetting"
+        android:icon="@drawable/ic_setting"
+        android:title="Seting" />
+</menu>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/plan_item_default_rds"
+    android:paddingHorizontal="20dp"
+    android:paddingVertical="5dp"
+    android:layout_marginBottom="10dp"
+    android:id="@+id/layoutPlanDashBoard">
+
+    <CheckBox
+        android:id="@+id/cbPlanDashBoard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvTitlePlanDashBoard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="Medical checkup"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/cbPlanDashBoard"
+        app:layout_constraintStart_toEndOf="@+id/cbPlanDashBoard"
+        app:layout_constraintTop_toTopOf="@+id/cbPlanDashBoard"
+        app:layout_constraintVertical_bias="0.551" />
+
+    <TextView
+        android:id="@+id/tvLevelPlanDashBoard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:text="Easy"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvTitlePlanDashBoard"
+        app:layout_constraintEnd_toStartOf="@+id/ivIconPlanDashBoard"
+        app:layout_constraintTop_toTopOf="@+id/tvTitlePlanDashBoard" />
+
+    <ImageView
+        android:id="@+id/ivIconPlanDashBoard"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_cloudy"
+        app:layout_constraintBottom_toBottomOf="@+id/tvLevelPlanDashBoard"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvLevelPlanDashBoard" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
