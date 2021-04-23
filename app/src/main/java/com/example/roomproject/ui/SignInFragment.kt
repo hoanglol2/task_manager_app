@@ -8,11 +8,15 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
+import androidx.lifecycle.lifecycleScope
 import com.example.roomproject.MainActivity
+import com.example.roomproject.MusicDao
+import com.example.roomproject.MusicDatabase
 import com.example.roomproject.R
 import kotlinx.android.synthetic.main.fragment_sign_in.*
+import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,10 +28,11 @@ private const val ARG_PARAM2 = "param2"
  * Use the [SignInFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class SignInFragment : Fragment() {
+class SignInFragment : Fragment(), View.OnTouchListener, View.OnClickListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private var musicDao: MusicDao? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,13 +54,17 @@ class SignInFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        musicDao = this.context?.let {
+            MusicDatabase.getDatabase(it).musicDao()
+        }
+
         // go back event
         ivBackSignIn.setOnClickListener {
             activity?.onBackPressed()
         }
 
         // Toggle password
-        edtPassword.addTextChangedListener(object : TextWatcher {
+        edtPasswordSignIn.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {}
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -66,29 +75,13 @@ class SignInFragment : Fragment() {
         })
 
         // set password in Edit text
-        ivShowPassword.setOnTouchListener { view, motionEvent ->
-            val buffInputType = when (motionEvent.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    -1
-                }
-                MotionEvent.ACTION_UP -> {
-                    1
-                }
-                else -> 0
-            }
-            edtPassword.inputType = edtPassword.inputType + buffInputType
-            true
-        }
+        ivShowPassword.setOnTouchListener(this)
 
         // go to SignUp event
-        tvGoSignUp.setOnClickListener {
-            (activity as? MainActivity)?.addFragment(SignupFragment(), true, "SignUpFragment")
-        }
+        tvGoSignUp.setOnClickListener(this)
 
         // go to dash board screen
-        tvSignIn.setOnClickListener {
-            (activity as? MainActivity)?.destroyAllFragment()
-        }
+        tvSignIn.setOnClickListener(this)
 
     }
 
@@ -110,5 +103,58 @@ class SignInFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    override fun onTouch(v: View?, motionEvent: MotionEvent?): Boolean {
+        when (v) {
+            ivShowPassword -> {
+                val buffInputType = when (motionEvent?.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        -1
+                    }
+                    MotionEvent.ACTION_UP -> {
+                        1
+                    }
+                    else -> 0
+                }
+                edtPasswordSignIn.inputType = edtPasswordSignIn.inputType + buffInputType
+
+            }
+        }
+        return true
+    }
+
+    override fun onClick(v: View?) {
+        when (v) {
+            tvGoSignUp -> {
+                (activity as? MainActivity)?.addFragment(SignupFragment(), true, "SignUpFragment")
+            }
+            tvSignIn -> {
+                checkUserValid()
+            }
+        }
+    }
+
+    private fun checkUserValid() {
+        if (edtEmailSignIn.text.isNotEmpty() &&
+            edtPasswordSignIn.text.isNotEmpty()
+        ) {
+            val email = edtEmailSignIn.text.toString()
+            val password = edtPasswordSignIn.text.toString()
+
+            lifecycleScope.launch {
+                val listUser = musicDao?.getUserWithInput(email, password)
+
+                if (!listUser.isNullOrEmpty()) {
+                    (activity as? MainActivity)?.destroyAllFragment()
+                } else {
+                    Toast.makeText(context, "Email or Password not Found!", Toast.LENGTH_LONG)
+                        .show()
+                }
+            }
+
+        } else {
+            Toast.makeText(context, "Email or Password is Empty!", Toast.LENGTH_LONG).show()
+        }
     }
 }

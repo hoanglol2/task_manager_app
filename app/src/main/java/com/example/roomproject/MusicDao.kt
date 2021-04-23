@@ -30,6 +30,13 @@ interface MusicDao {
     suspend fun getUsersAndLibraries(): List<UserWithLibrary>
 
     @Transaction
+    @Query("SELECT * FROM user WHERE email = :email AND password = :password")
+    suspend fun getUserWithInput(
+        email: String,
+        password: String
+    ): List<UserWithLibrary>
+
+    @Transaction
     @Query("SELECT * FROM User")
     suspend fun getUsersWithPlaylists(): List<UserWithPlaylists>
 
