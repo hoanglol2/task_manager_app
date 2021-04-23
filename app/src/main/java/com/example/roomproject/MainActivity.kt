@@ -5,7 +5,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
-import androidx.navigation.findNavController
+import com.example.roomproject.ui.CreateTaskFragment
 import com.example.roomproject.ui.HomeFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -27,8 +27,11 @@ class MainActivity : AppCompatActivity() {
                 R.id.miCalendar -> {
                 }
                 R.id.miCreateTask -> {
-                    this.findNavController(R.id.fragment)
-                        .navigate(R.id.action_dashBoardFragment_to_createTaskFragment)
+                    supportFragmentManager.beginTransaction().apply {
+                        add(android.R.id.content, CreateTaskFragment(), "CreateTaskFragment")
+                        addToBackStack(null)
+                        commit()
+                    }
                 }
                 R.id.miUser -> {
                 }
@@ -37,6 +40,7 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+
 
         /*val musicDao = MusicDatabase.getDatabase(this).musicDao()
 
